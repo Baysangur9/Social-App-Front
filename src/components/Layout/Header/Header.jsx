@@ -1,5 +1,5 @@
 import styles from "./Header.module.css";
 
 export default function Header() {
-  return <div></div>;
+  return <div className={styles}>Header</div>;
 }
