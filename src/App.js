@@ -7,8 +7,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="/auth" element={<Authorization />} />
       </Route>
+      <Route path="/auth" element={<Authorization />} />
     </Routes>
   );
 }
