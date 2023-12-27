@@ -5,6 +5,8 @@
 
   --content-bg-color:#E7E8EC;
   --content-bg-shadow-color:#d3d9de;
+  --red-color:#E64646;
+  --dark-red-color:#DB3B3B;
 
   --grey-color:#939393;
   --light-blue-color:#DAE2EA;
@@ -36,6 +38,10 @@ a {
 button {
   border: none;
   cursor: pointer;
+}
+
+input {
+  border: none;
 }
 
 .container {
