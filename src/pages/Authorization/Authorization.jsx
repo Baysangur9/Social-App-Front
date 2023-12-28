@@ -1,18 +1,29 @@
 import styles from "./Authorization.module.css";
+import {yupResolver} from "@hookform/resolvers/yup";
 import {ReactComponent as VKLogo} from "../../assets/vectors/Logo.svg";
 import {useState} from "react";
 import {useForm} from "react-hook-form";
+import {InputField} from "../../components/Ui/index";
+import * as yup from "yup";
 
 const Login = ({setAuth, onSubmit}) => {
   const switchAuth = () => {
     setAuth("register");
   };
 
+  const loginSchema = yup.object().shape({
+    mail: yup
+      .string()
+      .required("Обезательно напишите почту")
+      .email("Введите коректную почту"),
+    password: yup.string().required("Обезательно напишите пароль"),
+  });
+
   const {
     register,
     handleSubmit,
     formState: {errors},
-  } = useForm({mode: "onSubmit"});
+  } = useForm({mode: "onSubmit", resolver: yupResolver(loginSchema)});
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} action="" className={styles.form}>
@@ -23,20 +34,22 @@ const Login = ({setAuth, onSubmit}) => {
       <p className={styles.form__text}>
         Ваш пароль будет использоваться для входа в аккаунт
       </p>
-      <input
+      <InputField
+        errorClassName={styles.error}
+        label="Почта"
         type="email"
-        placeholder="Почта"
-        {...register("mail", {
-          required: "Вы не написали почту",
-        })}
+        register={register}
+        name="mail"
+        errors={errors}
       />
       {errors.mail && <p className={styles.error}>{errors.mail.message}</p>}
-      <input
+      <InputField
+        errorClassName={styles.error}
+        label="Пароль"
         type="password"
-        placeholder="Пароль"
-        {...register("password", {
-          required: "Напишите пароль",
-        })}
+        register={register}
+        name="password"
+        errors={errors}
       />
       {errors.password && (
         <p className={styles.error}>{errors.password.message}</p>
@@ -58,12 +71,31 @@ const Register = ({setAuth, onSubmit}) => {
     setAuth("login");
   };
 
+  const registerSchema = yup.object().shape({
+    mail: yup
+      .string()
+      .required("Обезательно напишите почту")
+      .email("Введите коректную почту"),
+    password: yup
+      .string()
+      .required("Обезательно напишите пароль")
+      .min(6, "Минимальная длина пароля 6 символов")
+      .max(20, "Максимальная длина пароля 20 символов")
+      .matches(
+        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/,
+        "Пароль должен содержать буквы и цифры"
+      ),
+    confirmPassword: yup
+      .string()
+      .required("Обезательно напишите пароль")
+      .oneOf([yup.ref("password"), null], "Пароли не совпадают"),
+  });
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: {errors},
-  } = useForm({mode: "onSubmit"});
+  } = useForm({mode: "onSubmit", resolver: yupResolver(registerSchema)});
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} action="" className={styles.form}>
@@ -74,44 +106,33 @@ const Register = ({setAuth, onSubmit}) => {
       <p className={styles.form__text}>
         Ваша почта будет использоваться для входа в аккаунт
       </p>
-      <input
+      <InputField
+        errorClassName={styles.error}
+        label="Почта"
         type="email"
-        placeholder="Почта"
-        {...register("email", {
-          required: "Вы не написали почту",
-        })}
+        register={register}
+        name="mail"
+        errors={errors}
       />
       {errors.mail && <p className={styles.error}>{errors.mail.message}</p>}
-      <input
+      <InputField
+        errorClassName={styles.error}
+        label="Пароль"
         type="password"
-        placeholder="Пароль"
-        {...register("password", {
-          required: "Напишите пароль",
-          minLength: {
-            value: 6,
-            message: "Минимальная длина пароля 6 символов",
-          },
-          maxLength: {
-            value: 16,
-            message: "Максимальная длина пароля 16 символов",
-          },
-          pattern: {
-            value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/,
-            message: "Пароль должен содержать буквы и цифры",
-          },
-        })}
+        register={register}
+        name="password"
+        errors={errors}
       />
       {errors.password && (
         <p className={styles.error}>{errors.password.message}</p>
       )}
-      <input
+      <InputField
+        errorClassName={styles.error}
+        label="Повторите пароль"
         type="password"
-        placeholder="Потвердите пароль"
-        {...register("ConfirmPassword", {
-          required: "Потвердите пароль",
-          validate: (value) => value === watch("password"),
-          message: "Пароли не совпадают",
-        })}
+        register={register}
+        name="confirmPassword"
+        errors={errors}
       />
       {errors.ConfirmPassword && (
         <p className={styles.error}>{errors.ConfirmPassword.message}</p>
