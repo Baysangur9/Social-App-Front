@@ -1,7 +1,7 @@
 :root {
   --primary-color: #5181B8;
   --secondary-color: #224B7A;
-  --link-color:#2a5885;
+  --link-color:#5089c2;
 
   --content-bg-color:#E7E8EC;
   --content-bg-shadow-color:#d3d9de;
@@ -24,10 +24,15 @@
 body {
   font-family: 'Roboto', sans-serif;
   background: #EDEEF0;
+  font-weight: 400;
 }
 
 ul,ol {
   list-style: none;
+}
+
+img {
+  width: 100%;
 }
 
 a {
